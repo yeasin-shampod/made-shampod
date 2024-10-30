@@ -1,0 +1,47 @@
+// defining my ETL process for provided airport data
+pipeline AirportDataPipeline {
+    FetchAirportData
+        -> TextToFileParser 
+            -> CsvDataParser 
+                -> FilteredColumns 
+                    -> LoadToDatabase;
+
+// taking this step to extract the data from the provided data source, this step is extract
+    block FetchAirportData oftype HttpExtractor {
+        url: "https://opendata.rhein-kreis-neuss.de/api/explore/v2.1/catalog/datasets/rhein-kreis-neuss-flughafen-weltweit/exports/csv?lang=en&timezone=Europe%2FBerlin&use_labels=true&delimiter=%3B";
+    }
+
+
+// now need to interpret downloaded data as text file
+    block TextToFileParser oftype TextFileInterpreter { }
+
+// now parsing CSV with delimiter and escape characters, this stpe is Transform
+    block CsvDataParser oftype CSVInterpreter {
+        delimiter: ";";
+        enclosing: '"'; 
+        enclosingEscape: '"';
+    }
+
+
+// selecting important columns and assign data types
+    block FilteredColumns oftype TableInterpreter {
+        header: true;
+        columns: [
+            "Lfd. Nummer" oftype integer,
+            "Name des Flughafens" oftype text,
+            "Ort" oftype text,
+            "Land" oftype text,
+            "IATA" oftype text,
+            "ICAO" oftype text,
+            "Latitude" oftype decimal, 
+            "Longitude" oftype decimal, 
+            "Altitude" oftype integer,
+        ];
+    }
+
+// Load data into SQLite database (Load)
+    block LoadToDatabase oftype SQLiteLoader {
+        table: "airports";
+        file: "./airports.sqlite";
+    }
+}
