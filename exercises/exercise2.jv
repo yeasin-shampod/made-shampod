@@ -1,0 +1,59 @@
+// defining my ETL process for provided trees data
+pipeline treesdataPipeline {
+    Fetchtreesdata
+        -> TextToFileParser 
+            -> CsvDataParser 
+                -> FilteredColumns 
+                    -> LoadToDatabase;
+
+// taking this step to extract the data from the provided data source, this step is extract
+    block Fetchtreesdata oftype HttpExtractor {
+        url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/stadt-neuss-herbstpflanzung-2023/exports/csv";
+    }
+
+
+// now need to interpret downloaded data as text file
+    block TextToFileParser oftype TextFileInterpreter { }
+
+// now parsing CSV with delimiter and escape characters, this stpe is Transform
+    block CsvDataParser oftype CSVInterpreter {
+        delimiter: ";";
+        enclosing: '"'; 
+        enclosingEscape: '"';
+    }
+
+
+// selecting important columns and assign data types
+    block FilteredColumns oftype TableInterpreter {
+        header: true;
+        columns: [
+            "lfd_nr" oftype integer,
+            "stadtteil" oftype stadtteiltext,
+            "standort" oftype text,
+            "baumart_botanisch" oftype text,
+            "id" oftype geotext,
+            "baumfamilie" oftype text,
+        ];
+    }
+    // Type to make sure "stadtteil" only contains entries that start with "Vogelsang"
+valuetype stadtteiltext oftype text {
+    constraints: [ stadtteiltextConstraint ];
+}
+
+// Type to make sure "id" contains valid geo-coordinates
+valuetype geotext oftype text {
+    constraints: [ geotextConstraint ];
+}
+
+// Rule: "stadtteil" must start with "Vogelsang"
+constraint stadtteiltextConstraint on text: value matches /^Vogelsang.*$/;
+
+// Rule: "id" should be in the format "latitude, longitude"
+constraint geotextConstraint on text: value matches /^\d{1,3}\.\d*, \d{1,3}\.\d*$/;
+
+// Load data into SQLite database (Load)
+    block LoadToDatabase oftype SQLiteLoader {
+        table: "trees";
+        file: "./trees.sqlite";
+    }
+}
