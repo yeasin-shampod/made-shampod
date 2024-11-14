@@ -1,44 +1,39 @@
 import pandas as pd
+import os
 from sqlalchemy import create_engine
 
-def extract_data(file_path):
-    """Load data from a local JSON file."""
-    with open(file_path, 'r') as file:
-        data = pd.read_json(file, orient='records')
+# Create a /data directory if it doesn't exist
+os.makedirs("/data", exist_ok=True)
+
+def extract_data():
+    """Load data from a local JSON file or any other source."""
+    file_path = '/path_to_your_data/your_data_file.json'
+    data = pd.read_json(file_path)  # Adjust based on your file format
     return data
 
 def transform_data(df):
     """Process and clean the data."""
-    # Example transformation: Normalize nested JSON columns, handle missing values, etc.
-    # If JSON structure is complex, use json_normalize
-    if 'nested_column' in df.columns:
-        df = pd.json_normalize(df['nested_column'])  # Adjust as needed for actual data structure
-
-    # Fill missing values or perform type conversions
-    df.fillna(0, inplace=True)  # Adjust as necessary
-    df['date'] = pd.to_datetime(df['date'], errors='coerce')  # Parse dates if applicable
+    # Example transformation: fill missing values, normalize, or convert types
+    df.fillna(0, inplace=True)
     return df
 
-def load_data(df, db_connection_string):
-    """Load data into a database."""
-    engine = create_engine(db_connection_string)
+def load_data(df):
+    """Load data into a SQLite database."""
+    db_path = '/data/air_quality_data.db'
+    engine = create_engine(f'sqlite:///{db_path}')
     with engine.connect() as connection:
         df.to_sql('air_quality_data', con=connection, if_exists='replace', index=False)
-    print("Data loaded successfully.")
+    print("Data loaded successfully into /data/air_quality_data.db.")
 
 def main():
-    # Specify the path to your local JSON file
-    file_path = 'path_to_your_file/aqs_api_specification.json'
-    
-    # Extract data
-    df = extract_data(file_path)
+    # Extract
+    df = extract_data()
 
-    # Transform data
+    # Transform
     df = transform_data(df)
 
-    # Load data
-    db_connection_string = "sqlite:///air_quality.db"  # Use your database connection string
-    load_data(df, db_connection_string)
+    # Load
+    load_data(df)
 
 if __name__ == "__main__":
     main()
