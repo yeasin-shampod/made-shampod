@@ -2,11 +2,12 @@ import pandas as pd
 import os
 from sqlalchemy import create_engine
 
-# Create a /data directory if it doesn't exist
+# Step 1: Ensure the /data directory exists
 os.makedirs("/data", exist_ok=True)
 
 def extract_data(file_path='/path_to_your_data/your_data_file.json'):
     """Load data from a local JSON file."""
+    # Step 2: Use the file_path parameter for flexibility
     data = pd.read_json(file_path)  # Adjust based on your file format
     return data
 
@@ -26,7 +27,7 @@ def load_data(df):
 
 def main():
     # Extract
-    df = extract_data()
+    df = extract_data()  # You can also pass a different path if needed
 
     # Transform
     df = transform_data(df)
