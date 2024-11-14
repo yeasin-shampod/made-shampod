@@ -5,9 +5,8 @@ from sqlalchemy import create_engine
 # Create a /data directory if it doesn't exist
 os.makedirs("/data", exist_ok=True)
 
-def extract_data():
-    """Load data from a local JSON file or any other source."""
-    file_path = '/path_to_your_data/your_data_file.json'
+def extract_data(file_path='/path_to_your_data/your_data_file.json'):
+    """Load data from a local JSON file."""
     data = pd.read_json(file_path)  # Adjust based on your file format
     return data
 
