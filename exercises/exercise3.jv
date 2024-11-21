@@ -1,0 +1,120 @@
+pipeline DataProcessingPipeline {
+
+  block DataHttpExtractor oftype HttpExtractor {
+    url: "https://thedocs.worldbank.org/en/doc/7d852628d96b9411d43e5d36d5dff941-0050062022/original/Graphs-Chapter-5-02082022.xlsx";
+  }
+
+  
+  block ExcelFileInterpreter oftype XLSXInterpreter { }
+
+  block BondIssuanceSheetPicker oftype SheetPicker {
+    sheetName: "Figure S5.1.2";
+  }
+
+  block GdpPerCapitaSheetPicker oftype SheetPicker {
+    sheetName: "Figure S5.1.2";
+  }
+
+
+  block BondIssuanceCellRangeSelector oftype CellRangeSelector {
+    select: range P2:S45;
+  }
+
+  block GdpPerCapitaCellRangeSelector oftype CellRangeSelector {
+    select: range P2:S45;
+  }
+
+
+  block BondIssuanceCountryCodeWriter oftype CellWriter {
+    at: cell P2;
+    write: ["Country Code"];
+  }
+
+  block BondIssuanceHeaderWriter oftype CellWriter {
+    at: cell S2;
+    write: ["Bond Issuance Share"];
+  }
+
+  block GdpPerCapitaCountryCodeWriter oftype CellWriter {
+    at: cell P2;
+    write: ["Country Code"];
+  }
+
+  block GdpPerCapitaHeaderWriter oftype CellWriter {
+    at: cell R2;
+    write: ["GDP per Capita"];
+  }
+
+  block BondIssuanceTableInterpreter oftype TableInterpreter {
+    header: true;
+    columns: [
+      "Country Code" oftype CountryCode,
+      "Bond Issuance Share" oftype BondIssuanceShare
+    ];
+  }
+
+  block GdpPerCapitaTableInterpreter oftype TableInterpreter {
+    header: true;
+    columns: [
+      "Country Code" oftype CountryCode,
+      "GDP per Capita" oftype GdpPerCapita
+    ];
+  }
+
+
+  block BondIssuanceDataLoader oftype SQLiteLoader {
+    table: "bondIssuance";
+    file: "./country-stats.sqlite";
+  }
+
+  block GdpPerCapitaDataLoader oftype SQLiteLoader {
+    table: "gdpPerCapita";
+    file: "./country-stats.sqlite";
+  }
+
+  valuetype CountryCode oftype text {
+    constraints: [ CCRegexConstraint ];
+  }
+
+  constraint CCRegexConstraint oftype RegexConstraint {
+    regex: /^[A-Z]{3}$/;
+  }
+
+  valuetype BondIssuanceShare oftype decimal {
+    constraints: [ BondIssuanceRange ];
+  }
+
+  constraint BondIssuanceRange oftype RangeConstraint {
+    lowerBound: 0;
+    upperBound: 1;
+    lowerBoundInclusive: true;
+    upperBoundInclusive: true;
+  }
+
+  valuetype GdpPerCapita oftype decimal {
+    constraints: [ GdpPerCapitaRange ];
+  }
+
+  constraint GdpPerCapitaRange oftype RangeConstraint {
+    lowerBound: 0;
+    lowerBoundInclusive: true;
+  }
+
+
+  DataHttpExtractor
+    -> ExcelFileInterpreter
+    -> BondIssuanceSheetPicker
+    -> BondIssuanceCountryCodeWriter
+    -> BondIssuanceHeaderWriter
+    -> BondIssuanceCellRangeSelector
+    -> BondIssuanceTableInterpreter
+    -> BondIssuanceDataLoader;
+
+  ExcelFileInterpreter
+    -> GdpPerCapitaSheetPicker
+    -> GdpPerCapitaCountryCodeWriter
+    -> GdpPerCapitaHeaderWriter
+    -> GdpPerCapitaCellRangeSelector
+    -> GdpPerCapitaTableInterpreter
+    -> GdpPerCapitaDataLoader;
+}
