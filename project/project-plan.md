@@ -1,38 +1,67 @@
 # Project Plan
 
-## Title
-Air Quality Analysis in Major North American Cities with the Rise of Electric Vehicles
-
-## Main Question
-
-How has air quality in major North American cities changed with the rise of electric vehicles?
-This is already well-phrased. Ensure it's focused and measurable with the data you have.
-
-## Description
-
-The purpose of this project is to evaluate the relationship between changes in air quality in major North American cities and the use of electric vehicles. The project will look into trends and effects using historical electric vehicle registration data and EPA's open-source air quality data. To find important changes and establish patterns, the study will employ statistical analysis and visualization techniques. The results can shed light on how environmentally friendly behaviors enhance environmental health.
-## Datasources
-
-EPA Air Quality Data
-* Metadata URL: Link to EPA's official data repository.
-* Data URL: Direct CSV or API endpoint (e.g., "https://www.epa.gov/outdoor-air-quality-data").
-* Description: This dataset provides comprehensive air quality metrics, including levels of pollutants such as NO2, CO2, and particulate matter over recent years.
-
-### Datasource1: ExampleSource
-Datasource2: Electric Vehicle Registration Data
-
-Metadata URL: Add if available (e.g., a government database or transportation report).
-Description: Contains yearly or quarterly data on the number of electric vehicles registered in different cities, reflecting adoption trends.
-Short description of the DataSource.
+## Overview
+This document outlines the plan for the project titled "Air Quality Analysis in Major North American Cities with the Rise of Electric Vehicles." The aim is to analyze the impact of electric vehicle adoption on air quality in major cities across North America. 
 
 ## Work Packages
-Example Work Packages:
-Data Collection: Collect air quality and electric vehicle data.
-Data Cleaning: Prepare and clean datasets for analysis.
-Descriptive Analysis: Summarize data trends over time.
-Statistical Correlation: Apply statistical methods to assess relationships.
-Visualization: Create charts and graphs to illustrate findings.
-Interpretation: Write a detailed analysis report.
-Presentation: Prepare visual and textual presentations of key results.
+The project will be divided into several work packages to achieve the goal efficiently. Each work package will be described below, with details of tasks, estimated completion dates, and dependencies.
 
-[i1]: https://github.com/jvalue/made-template/issues/1
+### Work Package 1: Dataset Collection & Preprocessing
+- **Description**: Collect the datasets relevant to air quality and electric vehicle adoption. Preprocess the data by cleaning, transforming, and fixing errors.
+- **Tasks**:
+  - Collect data on air quality for major North American cities (e.g., PM2.5, NOx levels, etc.).
+  - Collect data on the rise of electric vehicles in these cities.
+  - Clean and preprocess the datasets (handling missing values, duplicates, etc.).
+- **Estimated Completion Date**: [Date]
+- **Dependencies**: None
+
+### Work Package 2: Data Analysis & Exploration
+- **Description**: Explore the collected data to identify patterns, trends, and correlations between air quality and electric vehicle adoption.
+- **Tasks**:
+  - Load and visualize datasets to understand the structure and key variables.
+  - Identify potential errors, missing data, and outliers.
+  - Analyze relationships between air quality and electric vehicle adoption.
+- **Estimated Completion Date**: [Date]
+- **Dependencies**: Work Package 1
+
+### Work Package 3: Data Pipeline Development
+- **Description**: Create an automated data pipeline to collect, process, and store data for reporting.
+- **Tasks**:
+  - Develop a Python script for automating data collection.
+  - Implement data transformations and error fixing in the pipeline.
+  - Store processed data in a dedicated directory.
+  - Write a shell script to execute the pipeline.
+- **Estimated Completion Date**: [Date]
+- **Dependencies**: Work Package 2
+
+### Work Package 4: Report Generation & Documentation
+- **Description**: Prepare a data report summarizing the findings and analysis.
+- **Tasks**:
+  - Compile the data analysis results into a report.
+  - Discuss the quality of the data, any limitations, and findings from the analysis.
+  - Document the data pipeline and its architecture.
+- **Estimated Completion Date**: [Date]
+- **Dependencies**: Work Package 3
+
+## Timeline
+Below is a rough timeline of the work packages and milestones:
+
+| Work Package                  | Start Date | End Date   | Status     |
+|-------------------------------|------------|------------|------------|
+| Dataset Collection & Preprocessing | [Start Date] | [End Date] | In Progress |
+| Data Analysis & Exploration    | [Start Date] | [End Date] | Not Started |
+| Data Pipeline Development      | [Start Date] | [End Date] | Not Started |
+| Report Generation & Documentation | [Start Date] | [End Date] | Not Started |
+
+## Exploration of Datasets
+Before moving forward with the data pipeline, explore the datasets to understand the available data, errors, and limitations:
+- What data is available?
+- What errors need to be fixed?
+- What limitations present themselves (e.g., missing data, non-representative data)?
+- What data types are relevant, and do you need additional research on them?
+
+Use a Python notebook to load and explore the datasets to become more familiar with the data before moving to the next steps.
+
+## Notes
+- This plan is flexible and will be updated as the project progresses.
+- Regular review and update of the plan will ensure the project stays on track.
