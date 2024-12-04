@@ -12,8 +12,6 @@ def extract_data():
     df2 = pd.read_csv(url2)
 
     print("Data extracted successfully.")
-    print(len(df1.index))
-    print(len(df2.index))
     return df1, df2
 
 # Step 2: Transform function to clean and process data
@@ -22,7 +20,8 @@ def transform_data(df1, df2):
     df1.columns = [col.lower().replace(' ', '_') for col in df1.columns]
     
     # Handle missing values or unwanted text
-    df1.dropna(subset=['black_carbon', 'pm25'], inplace=True)  # Drop rows with missing key columns
+    # print(f"Black carbon: {df1['black_carbon'].isna().sum()}, pm25: {df1['pm25'].isna().sum()}")
+    # df1.dropna(subset=['black_carbon', 'pm25'], inplace=True)  # Drop rows with missing key columns
     df1['datetime'] = pd.to_datetime(df1['datetime'], errors='coerce')  # Ensure datetime format
 
     # Clean df2 columns
@@ -37,23 +36,21 @@ def transform_data(df1, df2):
 
 # Step 3: Load function to save data into CSV files and SQLite databases
 def load_data(df1, df2):
+    print("Inside Loader")
+    print(len(df1.index))
+    print(len(df2.index))
     # Save df1 as CSV file in /data directory
-    df1.to_csv('data/dataset_1.csv', index=False)
+    # df1.to_csv('data/dataset_1.csv', index=False)
 
     # Save df2 as CSV file in /data directory
-    df2.to_csv('data/dataset_2.csv', index=False)
+    # df2.to_csv('data/dataset_2.csv', index=False)
 
-    # Save df1 to SQLite database (dataset_1.db)
-    conn1 = sqlite3.connect('data/dataset_1.db')
-    df1.to_sql('dataset_1', conn1, if_exists='replace', index=False)
-    conn1.commit()
-    conn1.close()
-
-    # Save df2 to SQLite database (dataset_2.db)
-    conn2 = sqlite3.connect('data/dataset_2.db')
-    df2.to_sql('dataset_2', conn2, if_exists='replace', index=False)
-    conn2.commit()
-    conn2.close()
+    # Save df1 and df2 to SQLite database (dataset_1.db)
+    conn = sqlite3.connect('data/airquality_on_ev.db')
+    df1.to_sql('airquality', conn, if_exists='replace', index=False)
+    df2.to_sql('electric_vehicle', conn, if_exists='replace', index=False)
+    conn.commit()
+    conn.close()
 
     print("Data loaded into CSV and SQLite databases successfully.")
 
