@@ -11,21 +11,23 @@ def test_data_pipeline():
     load_data(df1, df2)
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    db1_path = os.path.join(root, "data", "dataset_1.db")
-    db2_path = os.path.join(root, "data", "dataset_2.db")
-    print(root)
-    print(db1_path)
-    print(db2_path)
+    db_path = os.path.join(root, "data", "airquality_on_ev.db")
 
-    assert os.path.exists(db1_path)
-    assert os.path.exists(db2_path)
+    assert os.path.exists(db_path)
 
-    # conn = sqlite3.connect(db1_path)
+def test_data_quality():
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    db_path = os.path.join(root, "data", "airquality_on_ev.db")
 
-    # expected_row_counts_db1 = 
+    conn = sqlite3.connect(db_path)
 
-    # for table_name, expected_row_count in expected_row_counts.items():
-    #     db_data = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
-    # #     assert len(db_data) == expected_row_count
+    expected_row_counts = {
+        "airquality": 173076,
+        "electric_vehicle": 18025
+    }
+
+    for table_name, expected_row_count in expected_row_counts.items():
+        db_data = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
+        assert len(db_data) == expected_row_count
     
-    # conn.close()
+    conn.close()
