@@ -12,6 +12,8 @@ def extract_data():
     df2 = pd.read_csv(url2)
 
     print("Data extracted successfully.")
+    print(len(df1.index))
+    print(len(df2.index))
     return df1, df2
 
 # Step 2: Transform function to clean and process data
