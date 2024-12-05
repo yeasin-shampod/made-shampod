@@ -1,0 +1,97 @@
+pipeline BateryTempPipeline
+{
+    block FileExtractor oftype HttpExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    }
+
+    block ZipInterpreter oftype ArchiveInterpreter {
+        archiveType: "zip";
+    }
+    
+    block DataPicker oftype FilePicker {
+        path: "/data.csv";
+    }
+    
+    block TextInterpreter oftype TextFileInterpreter {}
+
+    block CSVDataInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+    }
+
+    block ColDeleter oftype ColumnDeleter {
+        delete: [column F, column G, column H, column I];
+    }
+    
+    block DataRangeSelector oftype CellRangeSelector {
+        select: range A1:K*;
+    }
+
+    block HeadersChanger oftype CellWriter {
+        at: range A1:E1; 
+        write: ["id", "producer", "model", "month", "temperature"];
+    }
+
+    block RenameBatterytemp oftype CellWriter {
+        at: cell J1;
+        write: ["battery_temperature"]; 
+    }
+
+    block TableColInterpreter oftype TableInterpreter {
+        header: false;
+        columns: [
+            "id" oftype integer,
+            "producer" oftype text,
+            "model" oftype text,
+            "month" oftype integer,
+            "temperature" oftype decimal,
+            "battery_temperature" oftype decimal
+        ];
+    }
+    
+    transform CelsiusToFahrenheit {
+        from tempCelsius oftype decimal;
+        to tempFahrenheit oftype decimal;
+        tempFahrenheit: (tempCelsius * 9/5) + 32;
+    }
+   
+    block TempTransformer oftype TableTransformer {
+        inputColumns: ['temperature'];
+        outputColumn: 'temperature';
+        uses: CelsiusToFahrenheit;
+    }
+    
+    block BattryTempTransformer oftype TableTransformer {
+        inputColumns: ['battery_temperature'];
+        outputColumn: 'battery_temperature';
+        uses: CelsiusToFahrenheit;
+    }
+    
+    constraint ValidGeraetRange oftype RangeConstraint {
+        lowerBound: 1;
+        lowerBoundInclusive: true;
+    }
+
+    valuetype ValidateGeraetRange oftype integer {
+        constraints: [ ValidGeraetRange ];
+    } 
+
+    block DBDataLoader oftype SQLiteLoader 
+    { 
+        table: "temperatures"; 
+        file: "./temperatures.sqlite"; 
+    }
+
+    FileExtractor
+        -> ZipInterpreter
+        -> DataPicker
+        -> TextInterpreter
+        -> CSVDataInterpreter
+        -> ColDeleter
+        -> DataRangeSelector
+        -> HeadersChanger
+        -> RenameBatterytemp
+        -> TableColInterpreter
+        -> TempTransformer
+        -> BattryTempTransformer
+        -> DBDataLoader;
+}
