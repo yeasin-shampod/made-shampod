@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8  # change the version as requirement
+          python-version: 3.8  # You can change this to the Python version your project requires
 
       - name: Install dependencies
         run: |
@@ -27,7 +27,7 @@ jobs:
         run: |
           # If your tests require a script (like tests.sh), make sure it exists and is executable
           chmod +x tests.sh
-          project/tests.sh
+          ./tests.sh
 
       - name: Upload test results (optional)
         if: failure()
@@ -36,4 +36,11 @@ jobs:
           name: test-results
           path: test-results/
           
+      - name: Cache dependencies (optional)
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-cache-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-cache-
 
