@@ -1,4 +1,4 @@
-tname: CI Workflow
+name: CI Workflow
 
 on:
   push:
@@ -25,8 +25,8 @@ jobs:
 
       - name: Run tests with pytest
         run: |
-          chmod +x .project/tests.sh  # Ensure your test script is executable
-          .project/tests.sh  # Run your test script
+          chmod +x project/tests.sh  # Ensure your test script is executable
+          project/tests.sh  # Run your test script
 
   
 
