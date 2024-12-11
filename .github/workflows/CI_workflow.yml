@@ -35,11 +35,4 @@ jobs:
         with:
           name: test-results
           path: test-results/
-          
-      - name: Cache dependencies (optional)
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-cache-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-cache-
+      
