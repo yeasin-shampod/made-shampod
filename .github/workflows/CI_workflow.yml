@@ -16,29 +16,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8  # You can change this to the Python version your project requires
+          python-version: 3.8  # Using Python 3.8 as you had previously
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pandas sqlite3 
+          pip install pytest==7.4.0 pandas==1.5.3  # Install compatible versions for Python 3.8
 
       - name: Run tests with pytest
         run: |
           chmod +x tests.sh  # Ensure your test script is executable
           ./tests.sh  # Run your test script
 
-      - name: Upload test results (optional)
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: test-results/
+  
 
-      - name: Cache dependencies (optional)
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-cache-${{ hashFiles('project/test_pipeline.py') }}  # Cache Python dependencies
-          restore-keys: |
-            ${{ runner.os }}-pip-cache-
+      
