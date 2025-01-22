@@ -1,41 +1,40 @@
-#Air Quality Analysis in Major North American Cities with the Rise of Electric Vehicles (EVs)
-#Overview
+# Air Quality Analysis in Major North American Cities with the Rise of Electric Vehicles (EVs)
+# Overview 
 This project analyzes the impact of electric vehicle (EV) adoption on air quality in major North American cities between 2016 and 2021. By studying pollutants such as PM2.5, NO2, and CO, this research aims to understand the relationship between sustainable transportation and urban air quality improvement. Using regression models, we explore trends and provide insights into how EV adoption correlates with reduced air pollution.
-
-#Key Features
-Air Quality Trends: Detailed analysis of pollutant levels (PM2.5, NO2, CO) across multiple cities.
-EV Adoption Impact: Correlation between EV adoption rates and pollutant reduction.
-Statistical Analysis: Regression models to quantify relationships and identify significant factors.
-Data Pipeline: Robust ETL (Extract, Transform, Load) pipeline to prepare datasets for analysis.
-#Data Sources
-Air Quality Data: U.S. Environmental Protection Agency (EPA) - Daily pollutant measurements, including metadata about monitoring stations.
-Electric Vehicle Adoption Data: U.S. Department of Energy (DOE) - Annual EV registration trends by city and state.
-#Methodology
-Data Collection: Gathered data from EPA and DOE spanning 2016–2021.
-#Data Processing:
-Standardized column names and cleaned missing values.
-Aggregated daily pollutant data into yearly averages.
-Unified geographic identifiers for consistent analysis.
-#Analysis:
-Exploratory Data Analysis (EDA) to observe pollutant trends.
-Simple and multiple regression models to assess correlations.
-#Visualization: Charts and plots to illustrate key findings.
-#Results
-#Key Insights:
-NO2 emerged as the most significant contributor to PM2.5 levels.
-EV adoption showed a negative correlation with PM2.5 but was not statistically significant.
-Declines in pollutant levels align with increased EV usage but require further investigation.
-#Limitations:
-Small dataset and potential multicollinearity among variables.
-Need for broader factors and expanded data for deeper insights.
-#Technologies Used
-Programming Languages: Python
-Libraries and Tools: Pandas, NumPy, Matplotlib, Seaborn, SQLite
-Database: SQLite for efficient data querying and analysis.
-#Future Work
-Expand datasets to include more cities and years for increased statistical power.
-Refine regression models to incorporate additional variables and reduce collinearity.
-Investigate the long-term impact of EVs on other pollutants and urban mobility metrics.
+# Key Features
+* Air Quality Trends: Detailed analysis of pollutant levels (PM2.5, NO2, CO) across multiple cities.
+* EV Adoption Impact: Correlation between EV adoption rates and pollutant reduction.
+* Statistical Analysis: Regression models to quantify relationships and identify significant factors.
+* Data Pipeline: Robust ETL (Extract, Transform, Load) pipeline to prepare datasets for analysis.
+# Data Sources
+* Air Quality Data: U.S. Environmental Protection Agency (EPA) - Daily pollutant measurements, including metadata about monitoring stations.
+* Electric Vehicle Adoption Data: U.S. Department of Energy (DOE) - Annual EV registration trends by city and state.
+# Methodology
+1. Data Collection: Gathered data from EPA and DOE spanning 2016–2021.
+2. Data Processing:
+   Standardized column names and cleaned missing values.
+   Aggregated daily pollutant data into yearly averages.
+   Unified geographic identifiers for consistent analysis.
+3. Analysis:
+   Exploratory Data Analysis (EDA) to observe pollutant trends.
+   Simple and multiple regression models to assess correlations.
+4. Visualization: Charts and plots to illustrate key findings.
+# Results
+Key Insights:
+* NO2 emerged as the most significant contributor to PM2.5 levels.
+* EV adoption showed a negative correlation with PM2.5 but was not statistically significant.
+* Declines in pollutant levels align with increased EV usage but require further investigation.
+# Limitations:
+* Small dataset and potential multicollinearity among variables.
+* Need for broader factors and expanded data for deeper insights.
+# Technologies Used
+* Programming Languages: Python
+* Libraries and Tools: Pandas, NumPy, Matplotlib, Seaborn, SQLite
+* Database: SQLite for efficient data querying and analysis.
+# Future Work
+* Expand datasets to include more cities and years for increased statistical power.
+* Refine regression models to incorporate additional variables and reduce collinearity.
+* Investigate the long-term impact of EVs on other pollutants and urban mobility metrics.
 
 # Methods of Advanced Data Engineering Template Project
 
